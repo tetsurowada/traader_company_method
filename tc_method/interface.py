@@ -57,8 +57,8 @@ class TraderCompanyModel:
         sampler.init()
 
         logger.info("Training Trader Company Model...")
-        logger.info("Train X shape: ", train_x.shape)
-        logger.info("Train Y shape: ", train_y.shape)
+        logger.info("Train X shape: %s ", str(train_x.shape))
+        logger.info("Train Y shape: %s ", str(train_y.shape))
 
         interval = self.max_lags + self.duration
 
