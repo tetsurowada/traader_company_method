@@ -1,2 +1,3 @@
 # tc_method
-Trader company method implementation
+Trader Company Method Implementation
+[Usage](simple_prediction.ipynb)
