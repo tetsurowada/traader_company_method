@@ -31,6 +31,7 @@ class TraderCompanyModel:
         max_feats: int,
         traders: int,
         cut_off: float,
+        logger: Logger = None,
     ):
         self.stocks = stocks
         self.duration = duration
@@ -44,21 +45,24 @@ class TraderCompanyModel:
             "feats": None,
             "weights": None,
         }
+        self.logger = logger
+
+    def verbose(self):
+        return self.logger is not None
 
     def train(
         self,
         train_x: np.array,
         train_y: np.array,
         sampler: Sampler,
-        logger: Logger = None,
     ):
         if sampler is None:
             sampler = NumpyRandomGenerator()
         sampler.init()
-
-        logger.info("Training Trader Company Model...")
-        logger.info("Train X shape: %s ", str(train_x.shape))
-        logger.info("Train Y shape: %s ", str(train_y.shape))
+        if self.verbose():
+            self.logger.info("Training Trader Company Model...")
+            self.logger.info("Train X shape: %s ", str(train_x.shape))
+            self.logger.info("Train Y shape: %s ", str(train_y.shape))
 
         interval = self.max_lags + self.duration
 
@@ -74,9 +78,9 @@ class TraderCompanyModel:
             _feat_returns,
             _tgt_returns,
         )
-        logger.info("Initial traders created. Looping...")
         _loops = range(train_x.shape[0] - interval + 1)
-        if logger is not None:
+        if self.verbose():
+            self.logger.info("Initial traders created. Looping...")
             _loops = tqdm(_loops)
         for i in _loops:
             _feat_span = i + interval
@@ -120,7 +124,8 @@ class TraderCompanyModel:
         self.core["str_params"] = str_params
         self.core["feats"] = feats
         self.core["weights"] = weights
-        logger.info("Training completed.")
+        if self.verbose():
+            self.logger.info("Training completed.")
 
     def predict(self, test_x: np.array):
         _group_feats = generate_group_factors(
