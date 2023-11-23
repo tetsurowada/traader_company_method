@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "tc-method"
+version = "0.1.0"
+description = ""
+authors = ["tetsurowada <americanshort53@gmail.com>"]
+readme = "README.md"
+packages = [{include = "tc_method"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numba = "^0.58.1"
+numpy = "^1.26.2"
+optuna = "^3.4.0"
+tqdm = "^4.66.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.27.0"
+matplotlib = "^3.8.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
