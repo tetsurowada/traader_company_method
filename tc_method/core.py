@@ -1,4 +1,4 @@
-"""Core logic for the trader company method v2."""
+"""Core logic for the trader company method."""
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -31,14 +31,12 @@ class Sampler(ABC):
         (Public)
         Create a tuple of parameters for generating factors.
         """
-        return
 
     def is_stateful(self) -> bool:
         """
         (Public)
         Return whether the sampler is stateful.
         """
-        return
 
     @abstractmethod
     def update_recorder(self):
@@ -46,7 +44,6 @@ class Sampler(ABC):
         (Public)
         Update the recorder.
         """
-        pass
 
 
 def _spawn_traders(

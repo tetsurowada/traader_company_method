@@ -9,13 +9,15 @@ class NumpyRandomGenerator(Sampler):
     Numpy Random Generator.
     """
 
-    def __init__(self, seed: int = 42):
+    def __init__(self, seed: int = 42, logger=None):
         self.seed = seed
         self.rng = np.random.default_rng(self.seed)
         self.size = None
+        self.logger = logger
 
     def init(self):
-        print("Numpy Random Generator initialized.")
+        if self.logger is not None:
+            self.logger.info("Numpy Random Generator initialized.")
 
     def is_stateful(self) -> bool:
         """
@@ -80,10 +82,11 @@ _NUM_FACTOR_NAME = "num_factors"
 
 # FIXME: Takes too long to run
 class OptunaSampler(Sampler):
-    def __init__(self):
+    def __init__(self, logger=None):
         self.study = None
         self.current_trials = None
         self.size = 0
+        self.logger = logger
 
     def is_stateful(self):
         return True
@@ -97,7 +100,8 @@ class OptunaSampler(Sampler):
             optuna.logging.enable_default_handler()
 
         self.study = optuna.create_study(direction="maximize")
-        print("Optuna Sampler initialized.")
+        if self.logger is not None:
+            self.logger.info("Optuna Sampler initialized.")
 
     def _check_set_study(self):
         if self.study is None:
