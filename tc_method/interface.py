@@ -65,9 +65,10 @@ class TraderCompanyModel:
             self.logger.info("Train Y shape: %s ", str(train_y.shape))
 
         interval = self.max_lags + self.duration
-
-        _feat_returns = train_x[:interval]
-        _tgt_returns = train_y[: self.duration]
+        _start = self.max_lags
+        _end = interval
+        _feat_returns = train_x[:_end]
+        _tgt_returns = train_y[_start:_end]
 
         int_params, str_params, feats, weights = init_traders(
             sampler,
@@ -83,10 +84,10 @@ class TraderCompanyModel:
             self.logger.info("Initial traders created. Looping...")
             _loops = tqdm(_loops)
         for i in _loops:
-            _feat_span = i + interval
-            _tgt_span = i + self.duration
-            _feat_returns = train_x[i:_feat_span]
-            _tgt_returns = train_y[i:_tgt_span]
+            _end = i + interval
+            _start = i + self.max_lags
+            _feat_returns = train_x[i:_end]
+            _tgt_returns = train_y[_start:_end]
 
             _group_feats = generate_group_factors(
                 _feat_returns,
