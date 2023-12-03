@@ -140,5 +140,8 @@ class TraderCompanyModel:
         return _preds
 
     def get_latest_prediction(self, test_x: np.array) -> float:
-        assert test_x.shape[0] == self.max_lags + 1
+        assert test_x.shape[0] == self.max_lags + 1, ValueError(
+            f"""Invalid test_x shape.{test_x.shape} \
+                Expected: {(self.max_lags + 1, self.stocks)}"""
+        )
         return self.predict(test_x)[:, -1].mean()
