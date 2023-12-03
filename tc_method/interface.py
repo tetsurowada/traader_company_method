@@ -139,5 +139,6 @@ class TraderCompanyModel:
         _preds = create_predictions(_group_feats, self.core["weights"])
         return _preds
 
-    def get_latest_prediction(self, test_x: np.array):
+    def get_latest_prediction(self, test_x: np.array) -> float:
+        assert test_x.shape[0] == self.max_lags + 1
         return self.predict(test_x)[:, -1].mean()
