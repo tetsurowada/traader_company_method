@@ -15,7 +15,6 @@ from tc_method.core import (
     init_traders,
     replace_traders,
 )
-from tc_method.sampler import NumpyRandomGenerator
 
 
 class TraderCompanyModel:
@@ -57,7 +56,7 @@ class TraderCompanyModel:
         sampler: Sampler,
     ):
         if sampler is None:
-            sampler = NumpyRandomGenerator()
+            raise ValueError("Sampler cannot be None.")
         sampler.init()
         if self.verbose():
             self.logger.info("Training Trader Company Model...")
