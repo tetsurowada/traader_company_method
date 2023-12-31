@@ -2,6 +2,7 @@
 Interface for Trader Company Method.
 """
 from logging import Logger
+from typing import List
 
 import numpy as np
 from tqdm import tqdm
@@ -145,3 +146,26 @@ class TraderCompanyModel:
                 Expected: {(self.max_lags + 1, self.stocks)}"""
         )
         return self.predict(test_x)[:, -1].mean()
+
+
+class Cartel:
+    """ Multiple Trader Company Model."""
+
+    def __init__(self, companies: List[TraderCompanyModel]):
+        self.companies = companies
+        assert len(companies) > 0, ValueError("Invalid number of companies.")
+        sorted_lags = sorted([c.max_lags for c in companies], reverse=True)
+        self.max_lags = sorted_lags[0]
+
+        sorted_stocks = sorted([c.stocks for c in companies], reverse=True)
+        self.stocks = sorted_stocks[0]
+
+    def get_latest_prediction(self, test_x: np.array) -> np.int64:
+        """Get the latest prediction from the companies."""
+        assert test_x.shape[0] == self.max_lags + 1, ValueError(
+            f"""Invalid test_x shape.{test_x.shape} \
+                Expected: {(self.max_lags + 1, self.stocks)}"""
+        )
+        preds = [c.get_latest_prediction(test_x) for c in self.companies]
+
+        return np.sign(np.sum([1 if p > 0 else -1 for p in preds]))
